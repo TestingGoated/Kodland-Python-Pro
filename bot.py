@@ -1,8 +1,8 @@
 import discord
 import random
 import asyncio
+from discord.ext import commands
 
-# Configuração das intenções do bot
 intents = discord.Intents.default()
 intents.message_content = True
 
@@ -21,23 +21,23 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    # Ignorar mensagens do próprio bot para evitar loops
+
     if message.author == client.user:
         return
 
-    # 1. Comando para girar a moeda
+
     if message.content.startswith('!C.C'):
         fah = ["Coroa", "Cara"]
-        resultado = random.choice(fah)
+        resultado = random.choice(fah)  
         await message.channel.send("girando a moeda...")
         await message.channel.send(resultado)
 
-    # 2. Comando para gerar senha
+
     elif message.content.startswith('!senha'):
         senha = gen_pass(10)
         await message.channel.send(f"sua senha: {senha}")
 
-    # 3. Jogo de Adivinhação (Guess)
+   
     elif message.content.startswith('!guess'):
         await message.channel.send('Adivinhe um número entre 1 e 10 (você tem 5 segundos).')
 
@@ -47,7 +47,7 @@ async def on_message(message):
         answer = random.randint(1, 10)
 
         try:
-            # Aguarda a resposta do mesmo usuário no mesmo canal
+ 
             guess = await client.wait_for('message', check=is_correct, timeout=5.0)
         except asyncio.TimeoutError:
             return await message.channel.send(f'Demorou muito! O número era {answer}.')
@@ -57,4 +57,22 @@ async def on_message(message):
         else:
             await message.channel.send(f'Errou! Na verdade era {answer}.')
 
-client.run('token')
+
+    elif message.content.startswith("!lixo"):
+            msg = message.content.lower()
+
+            if "plastico" in msg:
+                await message.channel.send("Lixeira VERMELHA!")
+            elif "organico" in msg:
+                await message.channel.send("Lixeira MARROM!")
+            elif "metal" in msg:
+                await message.channel.send("Lixeira AMARELA!")
+            elif "papel" in msg:
+                await message.channel.send("Lixeira AZUL!")
+            elif "vidro" in msg:
+                await message.channel.send("Lixeira VERDE!")
+            else:
+                await message.channel.send("Escreva o tipo junto! Exemplo: `!lixo vidro/plastico/metal/papel/organico`")
+
+
+client.run('SEU TOKEN')
